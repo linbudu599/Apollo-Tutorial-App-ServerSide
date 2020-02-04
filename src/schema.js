@@ -2,10 +2,6 @@ const { gql } = require("apollo-server");
 
 const typeDefs = gql`
   type Query {
-    # without pagination, fetch all of data
-    # launches: [Launch]!
-    # launch(id: ID!): Launch
-    # me: User
     launches(
       pageSize: Int
       # If you add a cursor here, it will only return results _after_ this cursor
@@ -38,14 +34,8 @@ const typeDefs = gql`
     trips: [Launch]!
   }
 
-  # type Mission {
-  #   name: String
-  #   missionPatch(size: PatchSize): String
-  # }
-
   type Mission {
     name: String
-    # ... with rest of schema
     missionPatch(mission: String, size: PatchSize): String
   }
 
