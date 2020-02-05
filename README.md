@@ -1,16 +1,16 @@
 # Apollo-Tutorial-App-ServerSide
 
-> Apollo实践 全栈App 服务端部分
+> Apollo 实践 全栈 App 服务端部分
 >
 > 基于 [SpaceX API](https://github.com/r-spacex/SpaceX-API) 提供的 Restful API 以及 [Apollo-Server](https://github.com/apollographql/apollo-server)
->
+
 <!-- > 如果需要更好的阅读体验，请移步 [我的博客]()  -->
 
 ## 开始
 
 - 这篇文章假设你已经了解 `GraphQL` 的基础知识，至少包括 `Schema`、`Resolver` 以及 `Query`类型和 `Mutation` 类型。
 
-- [Apollo-Server](https://github.com/apollographql/apollo-server) 提供为一些 **web框架** 定制的上层封装，如 [Apollo-Server-Koa](https://github.com/apollographql/apollo-server/tree/master/packages/apollo-server-koa) 等，但在这里我直接使用原生的 `Apollo-Server`。
+- [Apollo-Server](https://github.com/apollographql/apollo-server) 提供为一些 **web 框架** 定制的上层封装，如 [Apollo-Server-Koa](https://github.com/apollographql/apollo-server/tree/master/packages/apollo-server-koa) 等，但在这里我直接使用原生的 `Apollo-Server`。
 
 - 官方文档请见 [这里](https://www.apollographql.com/docs/)，其中有对包括服务端和客户端的详细分析。
 
@@ -35,7 +35,7 @@ server.listen(4000).then(({ url }) => {
 });
 ```
 
-如果使用过 `GraphQL`，你应该能从上面的代码里大致猜到 `Apollo-Server` 实际上就是一层GraphQL封装，在上面我们提供了 类型定义（`typeDefs`）和对应的解析器（`resolvers`）。并且启动了一个服务，访问控制台中打印的地址，即是一个集可视化调试与文档于一体的平台，`GraphQL Playground`，类似于 `GraphiQL`。
+如果使用过 `GraphQL`，你应该能从上面的代码里大致猜到 `Apollo-Server` 实际上就是一层 GraphQL 封装，在上面我们提供了 类型定义（`typeDefs`）和对应的解析器（`resolvers`）。并且启动了一个服务，访问控制台中打印的地址，即是一个集可视化调试与文档于一体的平台，`GraphQL Playground`，类似于 `GraphiQL`。
 
 ## 类型定义与解析器
 
@@ -72,7 +72,7 @@ const typeDefs = gql`
     message: String
     launches: [Launch]
   }
-`
+`;
 ```
 
 ### 解析器
@@ -87,7 +87,7 @@ const typeDefs = gql`
 
 ```graphql
 query {
-  launch(id:1){
+  launch(id: 1) {
     id
     isBooked
   }
@@ -96,12 +96,12 @@ query {
 
 ```javascript
 // 解析器
- Launch: {
-    isBooked: async (launch, _, ctx) => {
-      console.log(launch);
-      ctx.dataSources.userAPI.isBookedOnLaunch({ launchId: launch.id });
-    }
-  }
+Launch: {
+  isBooked: async (launch, _, ctx) => {
+    console.log(launch);
+    ctx.dataSources.userAPI.isBookedOnLaunch({ launchId: launch.id });
+  };
+}
 ```
 
 打印出的 `launch` 值如下
@@ -114,7 +114,7 @@ query {
   mission: {
     name: 'FalconSat',
     missionPatchSmall: 'https://images2.imgbox.com/3c/0e/T8iJcSN3_o.png',
-    missionPatchLarge: 'https://images2.imgbox.com/40/e3/GypSkayF_o.png' 
+    missionPatchLarge: 'https://images2.imgbox.com/40/e3/GypSkayF_o.png'
   },
   rocket: { id: 'falcon1', name: 'Falcon 1', type: 'Merlin A' }
 }
@@ -122,13 +122,13 @@ query {
 
 - **args**，即你在发起查询/变更请求时携带的参数。
 
-- **context**，context是一个会在所有 GraphQL 请求间共享的一个上下文，在这个APP中，我们会借助 `Apollo-Server` ，把用户信息、数据集（库）都添加到这里。以此在解析器里进行鉴权、数据查询/变更等操作。
+- **context**，context 是一个会在所有 GraphQL 请求间共享的一个上下文，在这个 APP 中，我们会借助 `Apollo-Server` ，把用户信息、数据集（库）都添加到这里。以此在解析器里进行鉴权、数据查询/变更等操作。
 
-- **info**，info中存储着操作的执行状态，只应当在复杂应用中使用（官方文档说的，我也觉得我还没到那层次...）
+- **info**，info 中存储着操作的执行状态，只应当在复杂应用中使用（官方文档说的，我也觉得我还没到那层次...）
 
 ## 连接 RESTFUL API
 
-在很多情况下不可能为了使用 `GraphQL` 而直接重构后端的API，因此在这种情况下就需要使用 `Apollo-datasource-rest` 来连接REST API。详细配置见 [launch.js](src/datasources/launch.js)。
+在很多情况下不可能为了使用 `GraphQL` 而直接重构后端的 API，因此在这种情况下就需要使用 `Apollo-datasource-rest` 来连接 REST API。详细配置见 [launch.js](src/datasources/launch.js)。
 
 ```JavaScript
 // index.js
@@ -182,7 +182,7 @@ module.exports = LaunchAPI;
 
 ## 连接数据库
 
-> 读懂这个例子并不需要你有数据库知识。你只需要直到大致的连接方法即可，同样使用哪种数据库和ORM也是自由的。源码见 [user.js](src/datasources/user.js)
+> 读懂这个例子并不需要你有数据库知识。你只需要直到大致的连接方法即可，同样使用哪种数据库和 ORM 也是自由的。源码见 [user.js](src/datasources/user.js)
 
 类似于上面连接 REST API ， 你需要一个额外的包来允许你连接到数据库，即 `Apollo-datasource`。
 
@@ -215,7 +215,6 @@ class UserAPI extends DataSource {
 }
 
 module.exports = UserAPI;
-
 ```
 
 有几个需要注意的地方：
@@ -242,13 +241,46 @@ const server = new ApolloServer({
 });
 ```
 
-我们先不管 `createStore()` 方法，只要知道它是一个内部连接到SQLite（这个app使用的是sequelize+sqlite3）并暴露出两个数据库实例（`users` & `trips`）的方法即可。我们将它传入UserAPI的constructor方法，然后就可以通过`this.store.users.findOrCreate()`这样的方式来操作数据库了。注意这里的`findOrCreate` 是ORM的方法。
+我们先不管 `createStore()` 方法，只要知道它是一个内部连接到 SQLite（这个 app 使用的是 sequelize+sqlite3）并暴露出两个数据库实例（`users` & `trips`）的方法即可。我们将它传入 UserAPI 的 constructor 方法，然后就可以通过`this.store.users.findOrCreate()`这样的方式来操作数据库了。注意这里的`findOrCreate` 是 ORM 的方法。
+
+## 鉴权
+
+通过上面的代码变量能大概看出来，这个 APP 是调用了 Space X 的 API，本地建一个数据库，模拟用户登陆、查询火箭航班（？）、预定火箭、取消预定火箭等功能，那么这样就自然少不了用户鉴权。REST API 的处理方式通常是 http 头添加授权字段，或者使用 token 啊啥的。Apollo 的处理方式也差不多，发起 GraphQL 请求时也会携带 authorization 头，还记得上面提到的 `context` 吗，它的特性就是能够在每一个 GraphQL 查询之间共享，不仅仅是数据源，用户信息也可以被添加到这里面。
+
+补齐所有的 `index.js`
+
+```javascript
+const server = new ApolloServer({
+  context: async ({ req }) => {
+    // simple auth check on every request
+    const auth = (req.headers && req.headers.authorization) || "";
+    const email = Buffer.from(auth, "base64").toString("ascii");
+    if (!isEmail.validate(email)) return { user: null };
+    // find a user by their email
+    const users = await store.users.findOrCreate({ where: { email } });
+    const user = (users && users[0]) || null;
+
+    return { user: { ...user.dataValues } };
+  },
+  typeDefs,
+  // Apollo Server will automatically add the launchAPI and userAPI to resolvers' context
+  resolvers,
+  dataSources: () => ({
+    // data from restful api
+    launchAPI: new LaunchAPI(),
+    // data from database
+    userAPI: new UserAPI({ store })
+  })
+});
+```
+
+这里为 `context` 传入了一个参数，返回了一个 `user` 对象。`resolver`中可以直接获得这个信息。如果是在数据库（`UserAPI`）中，则可以使用 `this.context.user` 进行获取。
 
 ## 总结
 
-Apollo并没有使得使用 GraphQL 的难度提升，相反，它很好的封装了诸如连接到REST API、使用数据库的逻辑，使得开发者不需要再去操心这些。同时，[Apollo Graph Manager](https://engine.apollographql.com) 还提供了包括云存储/计算服务以及配套VS CODE插件等工具（虽然不知道为什么我没法用，上传总是超时）。
+Apollo 并没有使得使用 GraphQL 的难度提升，相反，它很好的封装了诸如连接到 REST API、使用数据库的逻辑，使得开发者不需要再去操心这些。同时，[Apollo Graph Manager](https://engine.apollographql.com) 还提供了包括云存储/计算服务以及配套 VS CODE 插件等工具（虽然不知道为什么我没法用，上传总是超时）。
 
-同时，Apollo有着一个庞大的生态，这篇文章介绍的服务端就像是冰山一角，它还有 `Apollo-Client`（Vue/React，还有IOS！），`Apollo-Link`，blabla...
+同时，Apollo 有着一个庞大的生态，这篇文章介绍的服务端就像是冰山一角，它还有 `Apollo-Client`（Vue/React，还有 IOS！），`Apollo-Link`，blabla...
 
 ## 客户端
 
