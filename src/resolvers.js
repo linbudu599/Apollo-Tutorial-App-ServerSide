@@ -39,10 +39,8 @@ module.exports = {
     }
   },
   Launch: {
-    isBooked: async (launch, _, ctx) => {
-      console.log(launch);
-      ctx.dataSources.userAPI.isBookedOnLaunch({ launchId: launch.id });
-    }
+    isBooked: async (launch, _, { dataSources }) =>
+      dataSources.userAPI.isBookedOnLaunch({ launchId: launch.id })
   },
   User: {
     trips: async (_, __, { dataSources }) => {
